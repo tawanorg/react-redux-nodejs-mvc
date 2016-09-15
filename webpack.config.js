@@ -1,19 +1,39 @@
 var webpack = require("webpack");
 var path = require("path");
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+
 module.exports = {
+	// devtool: "cheap-module-source-map", // production
+	devtool: "eval", // development
 	context: __dirname,
-	entry: ['whatwg-fetch',"./src/client/app.js"],
+	entry: ["./src/client/app.js"],
 	output: {
-		path: path.join(__dirname, "dist"),
-		publicPath: "/", // relative path for github pages
-		filename: "bundle.js", // no hash in main.js because index.html is a static page
+		path: path.join(__dirname, "dist/"),
+		filename: 'bundle-[hash].js',
+		publicPath: '/'
 	},
+	plugins: [
+		new webpack.optimize.UglifyJsPlugin({
+      compress: { warnings: false }
+    }),
+		new HtmlWebpackPlugin({
+			inject: true,
+			template: './src/templates/index.html',
+		}),
+	  new webpack.DefinePlugin({
+	    'process.env': {
+	      'NODE_ENV': JSON.stringify('production')
+	    }
+	  }),
+	],
 	module: {
 		loaders: [
-			{ test: /\.css$/,    loader: "style-loader!css-loader" },
-			{ test: /\.jsx?$/,   exclude: /node_modules/, loader: "babel-loader",query:{presets:['react','es2015']} },
-			{ test: /\.png$/,    loader: "url-loader?prefix=img/&limit=5000" },
-			{ test: /\.jpg$/,    loader: "url-loader?prefix=img/&limit=5000" },
+			{ test: /\.css$/,
+				loader: 'style!css-loader?modules&importLoaders=1&localIdentName=[name]_[hash:base64:5]'
+			},
+			{ test: /\.js?$/, exclude: /node_modules/, loader: "babel", query: { presets:['react','es2015']} },
+			{ test: /\.png$/, loader: "url-loader?prefix=img/&limit=5000" },
+			{ test: /\.jpg$/, loader: "url-loader?prefix=img/&limit=5000" },
 		]
 	},
   resolve: {

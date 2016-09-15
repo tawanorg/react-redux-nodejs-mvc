@@ -1,5 +1,6 @@
 import React from 'react';
 import 'whatwg-fetch';
+import styles from './TodoAppStyles.css';
 
 export default class TodoApp extends React.Component {
   constructor(props) {
@@ -51,7 +52,8 @@ export default class TodoApp extends React.Component {
         {
           this.state.todos && this.state.todos.map(
             (todo, key) =>
-              <li key={key} style={{textDecoration: todo.done ? 'line-through' : 'initial'}}
+
+              <li key={key} className={todo.done ? styles.linethrough : styles.initial}
                 onClick={this.toggle.bind(this,todo._id)}>
                 {todo.title}
                 <button onClick={this.delete.bind(this,todo._id)}>Delete</button>
