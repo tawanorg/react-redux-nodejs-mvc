@@ -6,7 +6,7 @@ module.exports = {
 	// devtool: "cheap-module-source-map", // production
 	devtool: "eval", // development
 	context: __dirname,
-	entry: ["./src/client/app.js"],
+	entry: ["babel-polyfill", "whatwg-fetch", "./src/client/app.js"],
 	output: {
 		path: path.join(__dirname, "dist/"),
 		filename: 'bundle-[hash].js',
@@ -29,9 +29,9 @@ module.exports = {
 	module: {
 		loaders: [
 			{ test: /\.css$/,
-				loader: 'style!css-loader?modules&importLoaders=1&localIdentName=[name]_[hash:base64:5]'
+				loader: 'style!css-loader?modules&importLoaders=1&localIdentName=[name][hash:base64:5]'
 			},
-			{ test: /\.js?$/, exclude: /node_modules/, loader: "babel", query: { presets:['react','es2015']} },
+			{ test: /\.js?$/, exclude: /node_modules/, loader: "babel-loader", query: { presets:['react','es2015']} },
 			{ test: /\.png$/, loader: "url-loader?prefix=img/&limit=5000" },
 			{ test: /\.jpg$/, loader: "url-loader?prefix=img/&limit=5000" },
 		]
