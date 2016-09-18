@@ -18,11 +18,11 @@ module.exports = {
     }),
 		new HtmlWebpackPlugin({
 			inject: true,
-			template: './src/templates/index.html',
+			template: './src/views/index.html',
 		}),
 	  new webpack.DefinePlugin({
 	    'process.env': {
-	      'NODE_ENV': JSON.stringify('production')
+	      'NODE_ENV': JSON.stringify('development')
 	    }
 	  }),
 	],

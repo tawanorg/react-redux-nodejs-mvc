@@ -5,7 +5,7 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 // Database connection
 mongoose.connect('mongodb://admin:admin@ds033066.mlab.com:33066/tectactic')
-const Todo = require('./models/TodoSchema.js')
+const Todo = require('./models/TodoModel.js')
 
 app.use(cors())
 

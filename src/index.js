@@ -1,5 +1,5 @@
 
-require('./server/api');
+require('./server/server');
 
 const express = require('express');
 const app = express();
