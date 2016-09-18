@@ -1,6 +1,7 @@
 import React from 'react';
 import 'whatwg-fetch';
 import styles from './TodoAppStyles.css';
+import Config from '../constants';
 
 export default class TodoApp extends React.Component {
   constructor(props) {
@@ -16,25 +17,25 @@ export default class TodoApp extends React.Component {
   }
 
   componentDidMount() {
-    fetch('http://localhost:3001').then((data) => data.json()).then((data) => {this.setState({todos: data})})
+    fetch(Config.API_URL+'/todo').then((data) => data.json()).then((data) => {this.setState({todos: data})})
   }
 
   toggle(id) {
-    fetch('http://localhost:3001/'+id+'/toggle', {method: 'POST'})
-    .then(() => fetch('http://localhost:3001')).then((data) => data.json()).then((data) => {this.setState({todos: data})})
+    fetch(Config.API_URL+'/todo/'+id+'/toggle', {method: 'POST'})
+    .then(() => fetch(Config.API_URL+'/todo')).then((data) => data.json()).then((data) => {this.setState({todos: data})})
   }
 
   delete(id,e) {
-    fetch('http://localhost:3001/'+id, {method: 'DELETE'})
-    .then(() => fetch('http://localhost:3001')).then((data) => data.json()).then((data) => {this.setState({todos: data})})
+    fetch(Config.API_URL+'/todo/'+id, {method: 'DELETE'})
+    .then(() => fetch(Config.API_URL+'/todo')).then((data) => data.json()).then((data) => {this.setState({todos: data})})
     e.preventDefault();
     e.stopPropagation();
     return false;
   }
 
   add(title) {
-    fetch('http://localhost:3001', {method: 'POST',headers:{'Content-Type': 'application/json'},body:JSON.stringify({title:title})})
-    .then(() => fetch('http://localhost:3001')).then((data) => data.json()).then((data) => {this.setState({todos: data,newTodo:''})})
+    fetch(Config.API_URL+'/todo', {method: 'POST',headers:{'Content-Type': 'application/json'},body:JSON.stringify({title:title})})
+    .then(() => fetch(Config.API_URL+'/todo')).then((data) => data.json()).then((data) => {this.setState({todos: data,newTodo:''})})
   }
 
   newTodoChange(e) {
@@ -42,25 +43,25 @@ export default class TodoApp extends React.Component {
   }
 
   render() {
-    return <div>
-      <div>
+    return (<div>
+        <div>
         <input type="text" onChange={this.newTodoChange} value={this.state.newTodo} />
         <button onClick={this.add.bind(this, this.state.newTodo)}>Add</button>
+        </div>
+        <ul>
+          {
+            this.state.todos && this.state.todos.map(
+              (todo, key) =>
+                <li key={key} className={todo.done ? styles.linethrough : styles.initial}
+                  onClick={this.toggle.bind(this,todo._id)}>
+                  {todo.title}
+                  <button onClick={this.delete.bind(this,todo._id)}>Delete</button>
+                </li>
+              )
+          }
+        </ul>
       </div>
-      <h1>Hello World</h1>
-      <ul>
-        {
-          this.state.todos && this.state.todos.map(
-            (todo, key) =>
-
-              <li key={key} className={todo.done ? styles.linethrough : styles.initial}
-                onClick={this.toggle.bind(this,todo._id)}>
-                {todo.title}
-                <button onClick={this.delete.bind(this,todo._id)}>Delete</button>
-              </li>
-            )
-        }
-      </ul>
-    </div>;
+    )
   }
+
 }
