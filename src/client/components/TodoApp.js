@@ -17,29 +17,67 @@ export default class TodoApp extends React.Component {
   }
 
   componentDidMount() {
-    fetch(Config.API_URL+'/todo').then((data) => data.json()).then((data) => {this.setState({todos: data})})
+    fetch(Config.API_URL+'/todo')
+      .then((data) => data.json())
+      .then((data) => {
+        this.setState({
+          todos: data
+        })
+      })
   }
 
   toggle(id) {
-    fetch(Config.API_URL+'/todo/'+id+'/toggle', {method: 'POST'})
-    .then(() => fetch(Config.API_URL+'/todo')).then((data) => data.json()).then((data) => {this.setState({todos: data})})
+    fetch(Config.API_URL+'/todo/'+id+'/toggle', {
+      method: 'POST'
+    })
+    .then(() => fetch(Config.API_URL+'/todo'))
+    .then((data) => data.json())
+    .then((data) => {
+      this.setState({
+        todos: data
+      })
+    })
   }
 
   delete(id,e) {
-    fetch(Config.API_URL+'/todo/'+id, {method: 'DELETE'})
-    .then(() => fetch(Config.API_URL+'/todo')).then((data) => data.json()).then((data) => {this.setState({todos: data})})
+    fetch(Config.API_URL+'/todo/'+id, {
+      method: 'DELETE'
+    })
+    .then(() => fetch(Config.API_URL+'/todo'))
+    .then((data) => data.json())
+    .then((data) => {
+      this.setState({
+        todos: data
+      })
+    })
     e.preventDefault();
     e.stopPropagation();
     return false;
   }
 
   add(title) {
-    fetch(Config.API_URL+'/todo', {method: 'POST',headers:{'Content-Type': 'application/json'},body:JSON.stringify({title:title})})
-    .then(() => fetch(Config.API_URL+'/todo')).then((data) => data.json()).then((data) => {this.setState({todos: data,newTodo:''})})
+    fetch(Config.API_URL+'/todo', {
+      method: 'POST',
+      headers:{
+        'Content-Type': 'application/json'
+      },
+      body:JSON.stringify({
+        title:title
+      })
+    })
+    .then(() => fetch(Config.API_URL+'/todo'))
+    .then((data) => data.json())
+    .then((data) => {
+      this.setState({
+        todos: data,newTodo:''
+      })
+    })
   }
 
   newTodoChange(e) {
-    this.setState({newTodo: e.target.value})
+    this.setState({
+      newTodo: e.target.value
+    })
   }
 
   render() {
